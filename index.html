@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- META ATTRIBUTES -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- WEBSITE -->
+	<title>GWA Calculator | BYA</title>
+	<link rel="icon" type="image/x-icon" href="Relic_Moonstone.png">
+
+	<!-- PYTHON -->
+	<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+	<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+	<!-- BS5 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+	<!-- ANIMATE CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+	<!-- INTERNAL CSS -->
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+		/* COLORS */
+		:root {
+			--text: #fcfcfc;
+			--glass-bg: rgba(255, 255, 255, 0.08);
+			--glass-border: rgba(255, 255, 255, 0.15);
+			--glass-hover-bg: rgba(255, 255, 255, 0.1);
+			--shadow: rgba(0, 0, 0, 0.3);
+			--purple: #a78bfa;
+		}
+		
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+	
+		body {
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			overflow-x: hidden;
+			font-family: 'Poppins';
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+			color: var(--text) !important;
+		}
+
+		.container {
+			align-items: center;
+			padding: 1rem 0;
+		}
+
+		#logo {
+			width: 150px;
+			display: block;
+			margin: 0 auto;
+			animation: bounce 2s infinite;
+		}
+
+		@keyframes bounce {
+			0%, 100% {
+				transform: translateY(0);
+			}
+			50% {
+				transform: translateY(-10px);
+			}
+		}
+
+		/* LEFT */
+		.calculator-container {
+			display: flex;
+			justify-content: center;
+			gap: 2rem;
+		}
+
+		.calculator, .result {
+			background: var(--glass-bg);
+			backdrop-filter: blur(30px);
+			border-radius: 40px;
+			padding: 3rem;
+			border: 2px solid var(--glass-border);
+			box-shadow: 0 30px 80px var(--shadow);
+			transition: all 0.4s ease;
+		}
+	
+		.calculator:hover, .result:hover {
+			transform: translateY(-10px);
+			box-shadow: 0 40px 100px rgba(167, 139, 250, 0.4);
+			border-color: rgba(167, 139, 250, 0.5);
+		}
+
+		.form-control {
+			background: var(--glass-bg);
+			border: 2px solid var(--glass-border);
+			border-radius: 16px;
+			padding-top: 0.75rem;
+			padding-bottom: 0.75rem;
+			font-size: 1rem;
+			font-weight: 500;
+			color: var(--text);
+			transition: all 0.3s ease;
+		}
+
+		.input-group-text {
+			background: none;
+			font-weight: 600;
+			min-width: 115px;
+			color: var(--text);
+		}
+
+		.grades-container {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+		}
+		
+		.form-label {
+			font-weight: 600;
+			color: #fff;
+			margin-bottom: 0.8rem;
+			font-size: 0.95rem;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		
+		.form-control::placeholder {
+			color: rgba(255, 255, 255, 0.4);
+		}
+		
+		.input-group:focus-within {
+			transform: translateY(-3px);
+			transition: transform 0.4s ease;
+		}
+
+		.input-group:focus-within .input-group-text {
+			background-color: #f093fb;
+			transition: all 0.4s ease;
+		}
+
+		.form-control:focus {
+			background: var(--glass-border);
+			border-color: var(--purple);
+			box-shadow: 0 0 0 5px rgba(167, 139, 250, 0.15);
+			color: var(--text);
+		}
+		
+		.form-control:hover {
+			border-color: rgba(167, 139, 250, 0.4);
+		}
+		
+		.name-input {
+			animation: fadeInUp 0.6s ease;
+		} 
+
+		.name-input:nth-child(1) { animation-delay: 0.1s; }
+		.name-input:nth-child(2) { animation-delay: 0.2s; }
+
+		.grade-input-group {
+			animation: fadeInUp 0.8s ease;
+		}
+
+		.grade-input-group:nth-child(1) { animation-delay: 0.3s; }
+		.grade-input-group:nth-child(2) { animation-delay: 0.4s; }
+		.grade-input-group:nth-child(3) { animation-delay: 0.5s; }
+		.grade-input-group:nth-child(4) { animation-delay: 0.6s; }
+		.grade-input-group:nth-child(5) { animation-delay: 0.7s; }
+		.grade-input-group:nth-child(6) { animation-delay: 0.8s; }
+		
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		.calc-btn {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: var(--text);
+			border: none;
+			border-radius: 20px;
+			padding-top: 0.75rem;
+			padding-bottom: 0.75rem;
+			font-size: 1.4rem;
+			font-weight: 750;
+			width: 100%;
+			transition: all 0.4s ease;
+			margin-top: 2rem;
+			position: relative;
+			overflow: hidden;
+			text-transform: uppercase;
+		}
+		
+		.calc-btn::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			border-radius: 50%;
+			background: var(--glass-border);
+			transform: translate(-50%, -50%);
+			transition: width 0.6s, height 0.6s;
+		}
+		
+		.calc-btn:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+		}
+		
+		.calc-btn:hover::before {
+			width: 500px;
+			height: 500px;
+		}
+		
+		.calc-btn:active {
+			transform: translateY(-2px);
+		}
+		
+		/* RIGHT */
+		.info-list {
+			list-style: none;
+			padding: 0;
+			margin-top: 1.5rem;
+		}
+		
+		.info-list li {
+			padding: 0.8rem 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			color: var(--text);
+		}
+		
+		.info-list li:last-child {
+			border-bottom: none;
+		}
+		
+		.info-list .grade-range {
+			font-weight: 650;
+			color: var(--text);
+			min-width: 80px;
+		}
+
+		.reset-btn {
+			background: rgba(255, 255, 255, 0.1);
+			color: var(--text);
+			border: 2px solid var(--glass-border);
+			border-radius: 20px;
+			padding-top: 0.75rem;
+			padding-bottom: 0.75rem;
+			font-size: 1.1rem;
+			font-weight: 700;
+			width: 100%;
+			transition: all 0.4s ease;
+			margin-top: 1rem;
+			text-transform: uppercase;
+			cursor: pointer;
+		}
+
+		.reset-btn:hover {
+			background: rgba(255, 100, 100, 0.3);
+			border-color: rgba(255, 100, 100, 0.5);
+			transform: translateY(-3px);
+			box-shadow: 0 10px 30px rgba(255, 100, 100, 0.3);
+		}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header animate__animated animate__fadeIn">
+			<img src="Relic_Nameless_Transcript.png" id="logo">
+		</div>
+		<!-- LEFT, INPUT FIELDS -->
+		<div class="calculator-container row mt-3">
+			<div class="calculator col-5">
+				<div class="input-group name-input">
+					<span class="input-group-text">First Name</span>
+					<input type="text" class="form-control" id="first_name" placeholder="e.g. Stephanie">
+				</div>
+				<div class="input-group name-input mt-3">
+					<span class="input-group-text">Last Name</span>
+					<input type="text" class="form-control" id="last_name" placeholder="e.g. Flores">
+				</div>	
+				<hr>
+				<div class="grades-container">
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">Science</span>
+							<input type="number" class="form-control" id="science" placeholder="0-100">
+						</div>
+					</div>
+					
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">Sorcery</span>
+							<input type="number" class="form-control" id="sorcery" placeholder="0-100">
+						</div>
+					</div>
+					
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">History</span>
+							<input type="number" class="form-control" id="history" placeholder="0-100">
+						</div>
+					</div>
+					
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">Linguistics</span>
+							<input type="number" class="form-control" id="linguistics" placeholder="0-100">
+						</div>
+					</div>
+					
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">Cookery</span>
+							<input type="number" class="form-control" id="cookery" placeholder="0-100">
+						</div>
+					</div>
+					
+					<div class="grade-input-group">
+						<div class="input-group">
+							<span class="input-group-text">PE</span>
+							<input type="number" class="form-control" id="pe" placeholder="0-100">
+						</div>
+					</div>
+				</div>
+
+				<!-- CALCULATE BUTTON -->
+				<button class="btn calc-btn" type="submit" py-click="calculate_gwa">Calculate GWA</button>
+			</div>
+
+			<!-- RIGHT, RESULT DISPLAY -->
+			<div class="result col-5">
+				<!-- YAY NEWJEANS REFERENCE -->
+				<h1 style="text-transform: uppercase; font-weight: 700;text-shadow: 2px 2px 5px var(--purple);">What's your GWA?</h1>
+
+				<!-- PYTHON DISPLAYS -->
+				<div id="result"></div>
+				<div id="summary"></div>
+
+				<!-- ARE YOUR GRADES GOOD? -->
+				<ul class="info-list">
+					<li>
+						<span class="grade-range">90-100</span>
+						<span>Outstanding</span>
+					</li>
+					<li>
+						<span class="grade-range">85-89</span>
+						<span>Very Satisfactory</span>
+					</li>
+					<li>
+						<span class="grade-range">80-84</span>
+						<span>Satisfactory</span>
+					</li>
+					<li>
+						<span class="grade-range">75-79</span>
+						<span>Fairly Satisfactory</span>
+					</li>
+					<li>
+						<span class="grade-range">Below 75</span>
+						<span>Did Not Meet Expectations</span>
+					</li>
+				</ul>
+
+				<!-- RESET BUTTON -->
+				<button class="btn reset-btn" type="button" py-click="reset_form" style="margin-top:  -10px;">Reset</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<py-script src="main.py"></py-script>
+</body>
+</html>
